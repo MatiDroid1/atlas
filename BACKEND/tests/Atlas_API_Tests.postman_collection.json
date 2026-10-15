@@ -1,0 +1,1011 @@
+{
+  "info": {
+    "name": "Atlas API — Casos de Prueba",
+    "_postman_id": "atlas-api-tests-v1",
+    "description": "Colección completa de casos de prueba para la API Atlas.\nMódulos: Autenticación, Empresas, Usuarios, Clientes, Contratos, Roles, Empresa-Usuarios, Métricas, Auditoría",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:4000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "empresa_id", "value": "", "type": "string" },
+    { "key": "usuario_id", "value": "", "type": "string" },
+    { "key": "cliente_id", "value": "", "type": "string" },
+    { "key": "contrato_id", "value": "", "type": "string" },
+    { "key": "rol_id", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "1. Autenticación",
+      "item": [
+        {
+          "name": "CP-AUTH-01 — Login válido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Tiene token JWT', () => {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data).to.have.property('token');",
+                  "  pm.collectionVariables.set('token', data.token);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/autenticacion/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre_usuario\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CP-AUTH-02 — Login contraseña incorrecta",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/autenticacion/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre_usuario\": \"admin\",\n  \"password\": \"contrasena_erronea_xyz\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CP-AUTH-03 — Login usuario inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/autenticacion/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre_usuario\": \"usuario_inexistente_xyz\",\n  \"password\": \"cualquier_cosa\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Empresas",
+      "item": [
+        {
+          "name": "CP-EMP-01 — Crear empresa con usuario",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set('ts', Date.now());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Tiene empresa y usuario', () => {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data).to.have.property('empresa');",
+                  "  pm.expect(data).to.have.property('usuario');",
+                  "  pm.collectionVariables.set('empresa_id', data.empresa.id);",
+                  "  pm.collectionVariables.set('usuario_id', data.usuario.id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/empresas",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuario\": {\n    \"nombre_usuario\": \"testuser_{{ts}}\",\n    \"contrasena_hash\": \"test1234\",\n    \"correo\": \"testuser_{{ts}}@mail.com\"\n  },\n  \"empresa\": {\n    \"nombre\": \"Empresa Test {{ts}}\",\n    \"correo\": \"empresa_{{ts}}@mail.com\",\n    \"telefono\": \"+56900000000\",\n    \"direccion\": \"Calle Falsa 123\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "CP-EMP-02 — Listar empresas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Respuesta es un array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/empresas"
+          }
+        },
+        {
+          "name": "CP-EMP-03 — Obtener empresa por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Tiene id', () => pm.expect(pm.response.json()).to.have.property('id'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/empresas/{{empresa_id}}"
+          }
+        },
+        {
+          "name": "CP-EMP-04 — Empresa ID inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/empresas/9999999"
+          }
+        },
+        {
+          "name": "CP-EMP-05 — Actualizar empresa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Nombre actualizado', () => pm.expect(pm.response.json().nombre).to.eql('Empresa Actualizada'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/empresas/{{empresa_id}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Empresa Actualizada\",\n  \"correo\": \"actualizada@mail.com\",\n  \"telefono\": \"+56911111111\",\n  \"direccion\": \"Nueva dirección 456\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Usuarios",
+      "item": [
+        {
+          "name": "CP-USR-01 — Listar usuarios (autenticado)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/usuarios",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-USR-02 — Listar usuarios sin token → 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/usuarios"
+          }
+        },
+        {
+          "name": "CP-USR-03 — Obtener usuario por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Tiene id', () => pm.expect(pm.response.json()).to.have.property('id'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/usuarios/{{usuario_id}}"
+          }
+        },
+        {
+          "name": "CP-USR-04 — Usuario ID inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/usuarios/9999999"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Roles",
+      "item": [
+        {
+          "name": "CP-ROL-01 — Crear rol",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Tiene nombre', () => {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data).to.have.property('nombre');",
+                  "  pm.collectionVariables.set('rol_id', data.id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/roles",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"nombre\": \"Rol_Test\" }"
+            }
+          }
+        },
+        {
+          "name": "CP-ROL-02 — Listar roles",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/roles"
+          }
+        },
+        {
+          "name": "CP-ROL-03 — Obtener rol por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/roles/{{rol_id}}"
+          }
+        },
+        {
+          "name": "CP-ROL-04 — Rol ID inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/roles/9999999"
+          }
+        },
+        {
+          "name": "CP-ROL-05 — Actualizar rol",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Nombre actualizado', () => pm.expect(pm.response.json().nombre).to.eql('Rol Actualizado'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/roles/{{rol_id}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"nombre\": \"Rol Actualizado\" }"
+            }
+          }
+        },
+        {
+          "name": "CP-ROL-06 — Eliminar rol",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 404', () => pm.expect([200, 404]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/roles/{{rol_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Empresa-Usuarios",
+      "item": [
+        {
+          "name": "CP-EU-01 — Listar vínculos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/empresa-usuarios"
+          }
+        },
+        {
+          "name": "CP-EU-02 — Vínculo ID inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/empresa-usuarios/9999999"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Clientes",
+      "item": [
+        {
+          "name": "CP-CLI-01 — Crear cliente (autenticado)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Tiene id', () => {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data).to.have.property('id');",
+                  "  pm.collectionVariables.set('cliente_id', data.id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/clientes",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente Test\",\n  \"correo\": \"cliente@test.com\",\n  \"telefono\": \"+56922222222\",\n  \"direccion\": \"Av. Prueba 789\",\n  \"es_empresa\": false\n}"
+            }
+          }
+        },
+        {
+          "name": "CP-CLI-02 — Crear cliente sin token → 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/clientes",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"nombre\": \"Sin Auth\", \"correo\": \"sinauth@test.com\" }"
+            }
+          }
+        },
+        {
+          "name": "CP-CLI-03 — Listar clientes (autenticado)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/clientes",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-CLI-04 — Listar clientes sin token → 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/clientes"
+          }
+        },
+        {
+          "name": "CP-CLI-05 — Obtener cliente por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Tiene id', () => pm.expect(pm.response.json()).to.have.property('id'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/clientes/{{cliente_id}}",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-CLI-06 — Cliente ID inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/clientes/9999999",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-CLI-07 — Buscar clientes por nombre",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/clientes/search?name=Test",
+              "query": [{ "key": "name", "value": "Test" }]
+            },
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-CLI-08 — Actualizar cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Nombre actualizado', () => pm.expect(pm.response.json().nombre).to.eql('Cliente Actualizado'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/clientes/{{cliente_id}}",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente Actualizado\",\n  \"correo\": \"actualizado@test.com\",\n  \"telefono\": \"+56933333333\",\n  \"direccion\": \"Dirección Nueva 101\",\n  \"es_empresa\": false\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Contratos",
+      "item": [
+        {
+          "name": "CP-CON-01 — Crear contrato con archivo PDF",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Tiene id', () => {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data).to.have.property('id');",
+                  "  pm.collectionVariables.set('contrato_id', data.id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/contratos",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "cliente_id", "value": "{{cliente_id}}", "type": "text" },
+                { "key": "titulo", "value": "Contrato de Prueba", "type": "text" },
+                { "key": "descripcion", "value": "Descripción de prueba", "type": "text" },
+                { "key": "fecha_inicio", "value": "2024-01-01", "type": "text" },
+                { "key": "fecha_fin", "value": "2025-12-31", "type": "text" },
+                { "key": "file", "type": "file", "src": [] }
+              ]
+            }
+          }
+        },
+        {
+          "name": "CP-CON-02 — Listar contratos (autenticado)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/contratos",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-CON-03 — Listar contratos sin token → 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/contratos"
+          }
+        },
+        {
+          "name": "CP-CON-04 — Obtener contrato por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Tiene id', () => pm.expect(pm.response.json()).to.have.property('id'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/contratos/{{contrato_id}}"
+          }
+        },
+        {
+          "name": "CP-CON-05 — Contrato ID inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/contratos/9999999"
+          }
+        },
+        {
+          "name": "CP-CON-06 — Dashboard estadísticas empresa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Tiene totalUsuarios', () => pm.expect(pm.response.json()).to.have.property('totalUsuarios'));",
+                  "pm.test('Tiene totalClientes', () => pm.expect(pm.response.json()).to.have.property('totalClientes'));",
+                  "pm.test('Tiene contratos vencen 7 días', () => pm.expect(pm.response.json()).to.have.property('contratosVencen7Dias'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/contratos/dashboard",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-CON-07 — Dashboard sin token → 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/contratos/dashboard"
+          }
+        },
+        {
+          "name": "CP-CON-08 — Contratos por estado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/contratos/estados",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-CON-09 — Actualizar contrato",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Título actualizado', () => pm.expect(pm.response.json().titulo).to.eql('Contrato Actualizado'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/contratos/{{contrato_id}}",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Contrato Actualizado\",\n  \"descripcion\": \"Descripción actualizada\",\n  \"fecha_fin\": \"2026-06-30\"\n}"
+            }
+          }
+        },
+        {
+          "name": "CP-CON-10 — Actualizar contrato sin token → 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/contratos/{{contrato_id}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"titulo\": \"Sin Auth\" }"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Métricas",
+      "item": [
+        {
+          "name": "CP-MET-01 — Obtener métricas (autenticado)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Tiene contratosProximosAVencer', () => pm.expect(pm.response.json()).to.have.property('contratosProximosAVencer'));",
+                  "pm.test('Tiene contratosVencidos', () => pm.expect(pm.response.json()).to.have.property('contratosVencidos'));",
+                  "pm.test('Tiene metricas', () => pm.expect(pm.response.json()).to.have.property('metricas'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/metricas",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-MET-02 — Métricas sin token → 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/metricas"
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Auditoría",
+      "item": [
+        {
+          "name": "CP-AUD-01 — Listar auditoría",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Respuesta es array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/auditoria"
+          }
+        },
+        {
+          "name": "CP-AUD-02 — Registrar entrada de auditoría",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Tiene accion', () => pm.expect(pm.response.json()).to.have.property('accion'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/auditoria",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accion\": \"PRUEBA_MANUAL\",\n  \"detalles\": \"Registro de prueba manual desde Postman\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Limpieza",
+      "item": [
+        {
+          "name": "CP-LMP-01 — Eliminar contrato de prueba",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 404', () => pm.expect([200, 404]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/contratos/{{contrato_id}}",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-LMP-02 — Eliminar cliente de prueba",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 404', () => pm.expect([200, 404]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/clientes/{{cliente_id}}",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "CP-LMP-03 — Eliminar empresa de prueba",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 404', () => pm.expect([200, 404]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/empresas/{{empresa_id}}"
+          }
+        },
+        {
+          "name": "CP-LMP-04 — Eliminar usuario de prueba",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 o 404', () => pm.expect([200, 404]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/usuarios/{{usuario_id}}",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        }
+      ]
+    }
+  ]
+}
