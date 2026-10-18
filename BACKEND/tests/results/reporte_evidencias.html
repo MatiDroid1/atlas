@@ -59,7 +59,7 @@
 <body>
 <header>
   <h1>🔬 Evidencias de Pruebas — Atlas API</h1>
-  <p>Generado el 14-10-2026, 11:51:38 p. m. &nbsp;|&nbsp; Duración total: 0.00 s</p>
+  <p>Generado el 18-10-2026, 5:43:23 p. m. &nbsp;|&nbsp; Duración total: 0.00 s</p>
 </header>
 
 <div class="summary">
@@ -99,7 +99,413 @@
       </tr>
     </thead>
     <tbody>
-      <tr><td colspan="6" style="text-align:center;padding:2rem;color:#64748b">Sin resultados</td></tr>
+      
+      <tr class="row-passed">
+        <td class="num">1</td>
+        <td>1. Autenticación — POST /autenticacion/login</td>
+        <td>CP-AUTH-01 — Login con credenciales válidas devuelve token JWT</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">4.266 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">2</td>
+        <td>1. Autenticación — POST /autenticacion/login</td>
+        <td>CP-AUTH-02 — Login con contraseña incorrecta devuelve 401</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">4.009 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">3</td>
+        <td>1. Autenticación — POST /autenticacion/login</td>
+        <td>CP-AUTH-03 — Login con usuario inexistente devuelve 401</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">4.009 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">4</td>
+        <td>2. Empresas — /empresas</td>
+        <td>CP-EMP-01 — Crear empresa con usuario (registro completo) devuelve 201</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">4.031 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">5</td>
+        <td>2. Empresas — /empresas</td>
+        <td>CP-EMP-02 — Listar empresas devuelve array</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.005 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">6</td>
+        <td>2. Empresas — /empresas</td>
+        <td>CP-EMP-03 — Obtener empresa por ID devuelve objeto con id</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.006 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">7</td>
+        <td>2. Empresas — /empresas</td>
+        <td>CP-EMP-04 — Obtener empresa con ID inexistente devuelve 404</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.007 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-failed">
+        <td class="num">8</td>
+        <td>2. Empresas — /empresas</td>
+        <td>CP-EMP-05 — Actualizar empresa devuelve objeto actualizado</td>
+        <td><span class="badge fail">❌ FALLÓ</span></td>
+        <td class="num">0.010 s</td>
+        <td><pre class="error">Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 200
+Received: 500
+    at Object.toBe (/app/tests/atlas.test.js:152:24)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</pre></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">9</td>
+        <td>3. Usuarios — /usuarios</td>
+        <td>CP-USR-01 — Listar usuarios autenticados devuelve array</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.032 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">10</td>
+        <td>3. Usuarios — /usuarios</td>
+        <td>CP-USR-02 — Listar usuarios sin token devuelve 401</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.009 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">11</td>
+        <td>3. Usuarios — /usuarios</td>
+        <td>CP-USR-03 — Obtener usuario por ID devuelve objeto con id</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.009 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">12</td>
+        <td>3. Usuarios — /usuarios</td>
+        <td>CP-USR-04 — Obtener usuario con ID inexistente devuelve 404</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.009 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">13</td>
+        <td>3. Usuarios — /usuarios</td>
+        <td>CP-USR-05 — Actualizar usuario devuelve usuario con datos nuevos</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.028 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-failed">
+        <td class="num">14</td>
+        <td>4. Roles — /roles</td>
+        <td>CP-ROL-01 — Crear rol devuelve 201 con nombre</td>
+        <td><span class="badge fail">❌ FALLÓ</span></td>
+        <td class="num">0.012 s</td>
+        <td><pre class="error">Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 201
+Received: 500
+    at Object.toBe (/app/tests/atlas.test.js:206:24)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</pre></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">15</td>
+        <td>4. Roles — /roles</td>
+        <td>CP-ROL-02 — Listar roles devuelve array</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.030 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">16</td>
+        <td>4. Roles — /roles</td>
+        <td>CP-ROL-03 — Obtener rol por ID devuelve objeto</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.001 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">17</td>
+        <td>4. Roles — /roles</td>
+        <td>CP-ROL-04 — Obtener rol con ID inexistente devuelve 404</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.005 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">18</td>
+        <td>4. Roles — /roles</td>
+        <td>CP-ROL-05 — Actualizar rol devuelve objeto actualizado</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.000 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-failed">
+        <td class="num">19</td>
+        <td>5. Empresa-Usuarios — /empresa-usuarios</td>
+        <td>CP-EU-01 — Listar vínculos devuelve array</td>
+        <td><span class="badge fail">❌ FALLÓ</span></td>
+        <td class="num">0.007 s</td>
+        <td><pre class="error">Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 200
+Received: 401
+    at Object.toBe (/app/tests/atlas.test.js:243:24)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</pre></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">20</td>
+        <td>5. Empresa-Usuarios — /empresa-usuarios</td>
+        <td>CP-EU-02 — Obtener vínculo inexistente devuelve 404</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.010 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">21</td>
+        <td>6. Clientes — /clientes</td>
+        <td>CP-CLI-01 — Crear cliente con token devuelve 201</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.022 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">22</td>
+        <td>6. Clientes — /clientes</td>
+        <td>CP-CLI-02 — Crear cliente sin token devuelve 401</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.008 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">23</td>
+        <td>6. Clientes — /clientes</td>
+        <td>CP-CLI-03 — Listar clientes con token devuelve array</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">4.013 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">24</td>
+        <td>6. Clientes — /clientes</td>
+        <td>CP-CLI-04 — Listar clientes sin token devuelve 401</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">4.006 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">25</td>
+        <td>6. Clientes — /clientes</td>
+        <td>CP-CLI-05 — Obtener cliente por ID devuelve objeto</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.007 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">26</td>
+        <td>6. Clientes — /clientes</td>
+        <td>CP-CLI-06 — Obtener cliente con ID inexistente devuelve 404</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.006 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">27</td>
+        <td>6. Clientes — /clientes</td>
+        <td>CP-CLI-07 — Buscar clientes por nombre devuelve array</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.008 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">28</td>
+        <td>6. Clientes — /clientes</td>
+        <td>CP-CLI-08 — Actualizar cliente devuelve objeto actualizado</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.018 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">29</td>
+        <td>7. Contratos — /contratos</td>
+        <td>CP-CON-01 — Crear contrato con archivo devuelve 201</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.027 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">30</td>
+        <td>7. Contratos — /contratos</td>
+        <td>CP-CON-02 — Listar contratos con token devuelve array</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">4.007 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">31</td>
+        <td>7. Contratos — /contratos</td>
+        <td>CP-CON-03 — Listar contratos sin token devuelve 401</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">4.011 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">32</td>
+        <td>7. Contratos — /contratos</td>
+        <td>CP-CON-04 — Obtener contrato por ID devuelve objeto</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.005 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">33</td>
+        <td>7. Contratos — /contratos</td>
+        <td>CP-CON-05 — Obtener contrato con ID inexistente devuelve 404</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.006 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">34</td>
+        <td>7. Contratos — /contratos</td>
+        <td>CP-CON-06 — Dashboard devuelve estadísticas de la empresa</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.011 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">35</td>
+        <td>7. Contratos — /contratos</td>
+        <td>CP-CON-07 — Dashboard sin token devuelve 401</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.006 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">36</td>
+        <td>7. Contratos — /contratos</td>
+        <td>CP-CON-08 — Contratos por estado devuelve array</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.008 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">37</td>
+        <td>7. Contratos — /contratos</td>
+        <td>CP-CON-09 — Actualizar contrato devuelve objeto actualizado</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.036 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">38</td>
+        <td>7. Contratos — /contratos</td>
+        <td>CP-CON-10 — Actualizar contrato sin token devuelve 401</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.006 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">39</td>
+        <td>8. Métricas — GET /metricas</td>
+        <td>CP-MET-01 — Obtener métricas con token devuelve estructura correcta</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">4.017 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">40</td>
+        <td>8. Métricas — GET /metricas</td>
+        <td>CP-MET-02 — Obtener métricas sin token devuelve 401</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">4.036 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">41</td>
+        <td>9. Auditoría — /auditoria</td>
+        <td>CP-AUD-01 — Listar auditoría devuelve array</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.006 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-failed">
+        <td class="num">42</td>
+        <td>9. Auditoría — /auditoria</td>
+        <td>CP-AUD-02 — Registrar entrada de auditoría devuelve 201</td>
+        <td><span class="badge fail">❌ FALLÓ</span></td>
+        <td class="num">0.009 s</td>
+        <td><pre class="error">Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 201
+Received: 500
+    at Object.toBe (/app/tests/atlas.test.js:491:24)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</pre></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">43</td>
+        <td>10. Limpieza — eliminar datos de prueba</td>
+        <td>CP-LMP-01 — Eliminar contrato de prueba</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.052 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">44</td>
+        <td>10. Limpieza — eliminar datos de prueba</td>
+        <td>CP-LMP-02 — Eliminar cliente de prueba</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.012 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-passed">
+        <td class="num">45</td>
+        <td>10. Limpieza — eliminar datos de prueba</td>
+        <td>CP-LMP-03 — Eliminar rol de prueba</td>
+        <td><span class="badge pass">✅ PASÓ</span></td>
+        <td class="num">0.001 s</td>
+        <td></td>
+      </tr>
+      <tr class="row-failed">
+        <td class="num">46</td>
+        <td>10. Limpieza — eliminar datos de prueba</td>
+        <td>CP-LMP-04 — Eliminar empresa de prueba</td>
+        <td><span class="badge fail">❌ FALLÓ</span></td>
+        <td class="num">0.011 s</td>
+        <td><pre class="error">Error: expect(received).toContain(expected) // indexOf
+
+Expected value: 500
+Received array: [200, 404]
+    at Object.toContain (/app/tests/atlas.test.js:527:24)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</pre></td>
+      </tr>
+      <tr class="row-failed">
+        <td class="num">47</td>
+        <td>10. Limpieza — eliminar datos de prueba</td>
+        <td>CP-LMP-05 — Eliminar usuario de prueba</td>
+        <td><span class="badge fail">❌ FALLÓ</span></td>
+        <td class="num">0.020 s</td>
+        <td><pre class="error">Error: expect(received).toContain(expected) // indexOf
+
+Expected value: 500
+Received array: [200, 404]
+    at Object.toContain (/app/tests/atlas.test.js:535:24)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</pre></td>
+      </tr>
     </tbody>
   </table>
 </section>

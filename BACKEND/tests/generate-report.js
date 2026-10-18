@@ -43,12 +43,11 @@ let suiteRows = "";
 let suiteIndex = 1;
 
 for (const suite of (report.testResults || [])) {
-  const suiteName = path.basename(suite.testFilePath || "desconocido");
-  const suiteStatus = suite.status;
+  const tests = suite.assertionResults || suite.testResults || [];
 
-  for (const test of (suite.testResults || [])) {
+  for (const test of tests) {
     const ancestorTitle = (test.ancestorTitles || []).join(" > ");
-    const testName = test.title || "";
+    const testName = test.title || test.fullName || "";
     const status = test.status;
     const dur = ((test.duration || 0) / 1000).toFixed(3);
     const errMsg = test.failureMessages && test.failureMessages.length > 0
